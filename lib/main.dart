@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_app/services/storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'services/storage.dart';
 import 'pages/homePage.dart';
 import 'constants/endpoints.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load();
   runApp(MyApp());
 }
 
@@ -33,11 +35,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final SecureStorage secureStorage = SecureStorage();
   bool isLoading = false;
-  final clientIdController = TextEditingController();
-  final clientSecretController = TextEditingController();
+  TextEditingController clientIdController = TextEditingController();
+  TextEditingController clientSecretController = TextEditingController();
 
-
-  _loginPressed(String clientID, String clientSecret,) async {
+  _loginPressed(
+    String clientID,
+    String clientSecret,
+  ) async {
     setState(() {
       isLoading = true;
     });
@@ -56,81 +60,63 @@ class _LoginPageState extends State<LoginPage> {
         'grant_type': 'client_credentials',
       },
     );
-
-    setState(() {
-      isLoading = false;
-    });
-
     if (response.statusCode == 200) {
-      secureStorage.writeSecureData('clientID', clientID);
-      secureStorage.writeSecureData('clientSecret', clientSecret);
-      var jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
+      var jsonResponse =
+          convert.jsonDecode(response.body) as Map<String, dynamic>;
+      secureStorage.writeSecureData(
+          'apiToken', jsonResponse['access_token'].toString());
       Navigator.push(
-          context, MaterialPageRoute(builder: (_) => HomePage()));
+          context, MaterialPageRoute(builder: (_) => const HomePage()));
     } else {
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Text('Request failed with code: ${response.statusCode}'
-                '$clientID'),
+            content: Text('Request failed with code: ${response.statusCode}'),
           );
         },
       );
     }
-
-
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text("Login Page"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-              child: TextField(
-                //controller: clientIdController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Client ID',
-                    hintText: 'Enter your client ID'),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-              child: TextField(
-                //controller: clientSecretController,
-                obscureText: false,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Client Secret',
-                    hintText: 'Enter Client Secret'),
-              ),
-            ),
-            isLoading ? const CircularProgressIndicator(
-              semanticsLabel: 'Linear progress indicator',
-            ) : Container(
-              height: 50,
-              width: 250,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-              child: TextButton(
-                onPressed: () => _loginPressed('a38f22a8e6854b0f83dbfa45047b0a89', '4ee03c36e29a43d788e57980ab35c743'),
-                child: const Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
-                ),
-              ),
-            ),
-          ],
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text("Login Page"),
         ),
-      ),
-    );
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              isLoading
+                  ? const CircularProgressIndicator(
+                      semanticsLabel: 'Linear progress indicator',
+                    )
+                  : Container(
+                      height: 50,
+                      width: 250,
+                      decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: TextButton(
+                        onPressed: () => _loginPressed(
+                            dotenv.env['CLIENT_ID'] ?? 'Client id not found',
+                            dotenv.env['CLIENT_SECRET'] ??
+                                'Client secret not found'),
+                        child: const Text(
+                          'Start exploring',
+                          style: TextStyle(color: Colors.white, fontSize: 25),
+                        ),
+                      ),
+                    ),
+            ],
+          ),
+        ));
   }
 }
