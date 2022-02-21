@@ -7,7 +7,7 @@ import 'dart:convert' as convert;
 
 import 'artistsPage.dart';
 import '../services/storage.dart';
-import '../constants/endpoints.dart';
+import '../services/endpoints.dart';
 import '../objects/featuredPlaylist.dart';
 
 class HomePage extends StatefulWidget {
@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
     );
     var playlistsJson = convert.jsonDecode(response.body);
     playlists = playlistsJson['playlists']['items'];
-    print(playlists.length);
     imageUrl = playlistsJson['playlists']['items'][0]['images'][0]['url'];
     setState(() {
       isLoading = false;
@@ -177,9 +176,6 @@ class _HomePageState extends State<HomePage> {
                         ],
                       )
                     ),
-                    ElevatedButton(
-                        onPressed: _getContext,
-                        child: const Text('Test Button')),
                   ],
                 ) : const LinearProgressIndicator(),
               ]

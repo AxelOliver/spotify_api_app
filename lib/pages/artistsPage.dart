@@ -4,7 +4,7 @@ import 'package:spotify_app/pages/artistDetailsPage.dart';
 import 'dart:convert';
 
 import '../services/storage.dart';
-import '../constants/endpoints.dart';
+import '../services/endpoints.dart';
 import 'widgets/imageInteractionCard.dart';
 
 class ArtistsPage extends StatefulWidget {

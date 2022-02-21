@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../services/storage.dart';
-import '../constants/endpoints.dart';
+import '../services/endpoints.dart';
 import 'widgets/imageInteractionCard.dart';
 
 class PlaylistsPage extends StatefulWidget {
@@ -30,8 +30,6 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.playlists);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Featured Playlists'),
