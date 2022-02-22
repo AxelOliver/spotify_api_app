@@ -41,20 +41,8 @@ class _PlaylistsPageState extends State<PlaylistsPage> {
           children: [
             Column(
               children: [
-                const Padding(
-                  padding:
-                  EdgeInsets.only(top: 15, left: 15, right: 15),
-                  child: Text(
-                    'You Searched for artists similar to:',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
                 for (var playlist in widget.playlists)
-                  imageInteractionCard(playlist, _launchURL),
+                  ImageInteractionCard(playlist, _launchURL, isFavouritable: false),
               ]
             )
           ],

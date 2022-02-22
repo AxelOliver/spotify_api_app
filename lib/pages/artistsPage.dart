@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import '../services/storage.dart';
 import '../services/endpoints.dart';
+import 'favouritesPage.dart';
 import 'widgets/imageInteractionCard.dart';
 
 class ArtistsPage extends StatefulWidget {
@@ -39,30 +40,49 @@ class _ArtistsPageState extends State<ArtistsPage> {
     });
   }
 
-  _getArtistDetails(dynamic artist) {
-    Navigator.push(
+  _saveFavourite(dynamic artist) async {
+
+  }
+
+  _getArtistDetails(dynamic artist) async {
+    await Navigator.push(
         context, MaterialPageRoute(builder: (_) => ArtistDetails(artist)));
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback(
-        (_) => _getRelatedArtists(widget.artists['artists']['items'][0]['id']));
+    if (widget.artists['artists']['items'].length > 0) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) =>
+              _getRelatedArtists(widget.artists['artists']['items'][0]['id']));
+    } else {
+      artistList = null;
+      isLoading = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.artists);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Artists Page'),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => FavouritesPage()));
+                setState(() {});
+              },
+              icon: const Icon(Icons.favorite_border))
+        ],
       ),
       body: Center(
         child: isLoading
             ? const Center(child: LinearProgressIndicator())
-            : ListView(
+            : artistList == null?
+        const Text('Couldn\'t find artist')
+        : ListView(
                 children: [
                   Column(
                     children: [
@@ -78,14 +98,24 @@ class _ArtistsPageState extends State<ArtistsPage> {
                           ),
                         ),
                       ),
-                      imageInteractionCard(widget.artists['artists']['items'][0],
-                          _getArtistDetails),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ImageInteractionCard(widget.artists['artists']['items'][0],
+                            _getArtistDetails),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
+                        child: artistList['artists'].length >0? Text(
                           'If you like ${widget.artists['artists']['items'][0]['name']}, maybe you\'ll like',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ) : const Text(
+                          'Couldn\'t find any similar artists',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -94,7 +124,10 @@ class _ArtistsPageState extends State<ArtistsPage> {
                     ],
                   ),
                   for (var artist in artistList['artists'])
-                    imageInteractionCard(artist, _getArtistDetails),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ImageInteractionCard(artist, _getArtistDetails),
+                    ),
                 ],
               ),
       ),

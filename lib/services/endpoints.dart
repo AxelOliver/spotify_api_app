@@ -55,7 +55,8 @@ class Endpoints {
       }
   */
   final String getFeaturedPlaylist = 'https://api.spotify.com/v1/browse/featured-playlists';
-  final String getSearchQuery = 'https://api.spotify.com/v1/search?type=artist&include_external=audio&limit=1&q=';
+  final String getSearchQuery = 'https://api.spotify.com/v1/search?type=artist&limit=1&q=';
+  final String getArtistFromId = 'https://api.spotify.com/v1/artists/';
 
   /*
   Gets Related artists based on entered artist ID
@@ -95,4 +96,5 @@ class Endpoints {
     return 'https://api.spotify.com/v1/artists/$artistID/related-artists';
   }
   final String getArtistDetails = 'https://theaudiodb.com/api/v1/json/2/search.php?s=';
+  final String getSeveralArtists = 'https://api.spotify.com/v1/artists&ids=';
 }
