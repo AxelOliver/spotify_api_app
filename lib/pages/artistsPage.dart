@@ -22,6 +22,7 @@ class _ArtistsPageState extends State<ArtistsPage> {
   bool isLoading = true;
   dynamic artistList;
 
+  // TODO: refactor function to be usable more globally
   _getRelatedArtists(String id) async {
     setState(() {
       isLoading = true;
@@ -38,10 +39,6 @@ class _ArtistsPageState extends State<ArtistsPage> {
     setState(() {
       isLoading = false;
     });
-  }
-
-  _saveFavourite(dynamic artist) async {
-
   }
 
   _getArtistDetails(dynamic artist) async {
@@ -72,6 +69,8 @@ class _ArtistsPageState extends State<ArtistsPage> {
               onPressed: () async {
                 await Navigator.push(context,
                     MaterialPageRoute(builder: (_) => FavouritesPage()));
+                // TODO: confirm if theres a better practise to refresh state
+                //empty setState to reload state when new page gets popped
                 setState(() {});
               },
               icon: const Icon(Icons.favorite_border))

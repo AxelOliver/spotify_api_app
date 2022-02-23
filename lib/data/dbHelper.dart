@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as Path;
 
 class DbHelper {
+  // DbHelper class is a singleton to optimise loading times
   DbHelper._privateConstructor();
   static final DbHelper instance = DbHelper._privateConstructor();
 
@@ -32,6 +33,7 @@ class DbHelper {
   }
 
   Future<List<Artist>> searchFavourites(String searchTerm) async {
+    // returns all favourites if passed empty string to work with TextFields
     if (searchTerm == "") {
       print(searchTerm);
       return getFavourites();
@@ -54,6 +56,7 @@ class DbHelper {
     return await db.insert('favourite_artists', artist.toMap());
   }
 
+  // uses spotify ID so
   Future<int> remove(String spotifyId) async {
     Database db = await instance.database;
     return await db.delete('favourite_artists', where: 'spotify_id = ?', whereArgs: [spotifyId]);

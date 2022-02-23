@@ -26,16 +26,6 @@ class _ArtistDetailsState extends State<ArtistDetails> {
   var f = NumberFormat('###,###,###,##0', 'fr');
   var artistSummary;
 
-  String _capitalize(String input) {
-    final List<String> splitStr = input.split(' ');
-    for (int i = 0; i < splitStr.length; i++) {
-      splitStr[i] =
-          '${splitStr[i][0].toUpperCase()}${splitStr[i].substring(1)}';
-    }
-    final output = splitStr.join(' ');
-    return output;
-  }
-
   void _launchURL(dynamic artist) async {
     if (!await launch(artist['external_urls']['spotify'])) {
       throw 'Could not launch ${artist['external_urls']['spotify']}';
