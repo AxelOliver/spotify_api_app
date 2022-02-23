@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path/path.dart' as Path;
+import 'package:sqflite/sqflite.dart';
 
 import 'services/storage.dart';
 import 'pages/homePage.dart';
@@ -10,6 +12,7 @@ import 'services/endpoints.dart';
 
 Future<void> main() async {
   await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -38,10 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController clientIdController = TextEditingController();
   TextEditingController clientSecretController = TextEditingController();
 
-  _loginPressed(
-    String clientID,
-    String clientSecret,
-  ) async {
+  _loginPressed(String clientID, String clientSecret) async {
     setState(() {
       isLoading = true;
     });
@@ -106,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(20)),
                       child: TextButton(
                         onPressed: () => _loginPressed(
+                          // best practise for storing keys?
                             dotenv.env['CLIENT_ID'] ?? 'Client id not found',
                             dotenv.env['CLIENT_SECRET'] ??
                                 'Client secret not found'),

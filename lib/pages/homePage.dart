@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotify_app/pages/playlistsPage.dart';
@@ -8,7 +6,7 @@ import 'dart:convert' as convert;
 import 'artistsPage.dart';
 import '../services/storage.dart';
 import '../services/endpoints.dart';
-import '../objects/featuredPlaylist.dart';
+import 'favouritesPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -110,6 +108,13 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Home Page'),
+          actions: [
+            IconButton(
+                onPressed: () {Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => FavouritesPage()));},
+                icon: const Icon(Icons.favorite_border)
+            )
+          ],
         ),
         body: Center(
           child: ListView(
