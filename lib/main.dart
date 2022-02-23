@@ -10,6 +10,11 @@ import 'services/storage.dart';
 import 'pages/homePage.dart';
 import 'services/endpoints.dart';
 
+// TODO: extract logic from pages to convert structure to MVVM format
+// I havent done this because I wanted to confirm exactly how BlueSky architectures their projects
+// TODO: extract complicated widgets to clean up code
+// TODO: fix if user hasn't refreshed API key after 1 hour it expires
+
 Future<void> main() async {
   await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
@@ -106,7 +111,8 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(20)),
                       child: TextButton(
                         onPressed: () => _loginPressed(
-                          // best practise for storing keys?
+                          // TODO: confirm if .env is best practice for storing sensitive data
+                          // use .env package to generate application wide API key
                             dotenv.env['CLIENT_ID'] ?? 'Client id not found',
                             dotenv.env['CLIENT_SECRET'] ??
                                 'Client secret not found'),

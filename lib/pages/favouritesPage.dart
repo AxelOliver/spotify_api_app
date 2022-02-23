@@ -59,6 +59,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
               ),
             ),
             FutureBuilder<List<Artist>>(
+              // searchFavourites returns all favourites if passed empty string
                 future: DbHelper.instance.searchFavourites(searchString),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<Artist>> snapshot) {
@@ -77,6 +78,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                   ))
                       : Flexible(
                           child: ListView(
+                            // map each artist to a tile
                             children: snapshot.data!.map((artist) {
                               return Center(
                                 child: ListTile(

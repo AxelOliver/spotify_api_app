@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   Endpoints endpoints = Endpoints();
   dynamic playlists;
   dynamic featuredPlaylist;
-  String imageUrl = 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png';
+  String imageUrl = '';
 
   @override
   void initState() {
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             height: 360,
                             child: InkWell(
-                              onTap: () {_getPlaylists();},
+                              onTap: () => _getPlaylists(),
                             )
                           ),
                         ],
