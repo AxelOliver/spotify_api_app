@@ -31,6 +31,24 @@ class DbHelper {
     return artists;
   }
 
+  Future<List<Artist>> searchFavourites(String searchTerm) async {
+    if (searchTerm == "") {
+      print(searchTerm);
+      return getFavourites();
+    } else {
+      Database db = await instance.database;
+      var result = await db.query(
+          'favourite_artists',
+          where: 'UPPER(name) LIKE UPPER(\'%$searchTerm%\')',
+          orderBy: 'UPPER(name)');
+      //SELECT * FROM favourite_artists WHERE UPPER(name) LIKE UPPER(\'$searchTerm\')
+      List<Artist> artists = result.isNotEmpty?
+      result.map((e) => Artist.fromMap(e)).toList()
+          : [];
+      return artists;
+    }
+  }
+
   Future<int> add(Artist artist) async {
     Database db = await instance.database;
     return await db.insert('favourite_artists', artist.toMap());
