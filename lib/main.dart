@@ -7,7 +7,7 @@ import 'package:path/path.dart' as Path;
 import 'package:sqflite/sqflite.dart';
 
 import 'services/storage.dart';
-import 'pages/homePage.dart';
+import 'ui/views/home/home_view.dart';
 import 'services/endpoints.dart';
 
 // TODO: extract logic from pages to convert structure to MVVM format
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
       secureStorage.writeSecureData(
           'apiToken', jsonResponse['access_token'].toString());
       Navigator.push(
-          context, MaterialPageRoute(builder: (_) => const HomePage()));
+          context, MaterialPageRoute(builder: (_) => const HomeView()));
     } else {
       showDialog(
         context: context,
