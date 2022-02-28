@@ -72,6 +72,7 @@ class HomeViewModel extends BaseViewModel {
         },
       );
       var artists = convert.jsonDecode(response.body);
+      // TODO: implement auto router
       Navigator.push(
           context, MaterialPageRoute(builder: (_) => ArtistsPage(artists)));
       _isSearching = false;
